@@ -1,33 +1,57 @@
 extern crate pancurses;
 mod buffer;
-use pancurses::{initscr, endwin, noecho,Input};
+use pancurses::{initscr, endwin, noecho,Input,Window};
 use std::collections::HashMap;
 
-type KeyBindFunction = fn();
+// TODO: Move this somewhere else
+fn kbf_nop(state: &mut State) {}
 
-let mut nmap: HashMap<char, KeyBindFunction> = HashMap::new();
-let mut mode = Mode::NORMAL;
+type KeyBindFunction = fn(state: &mut State);
+
+pub struct State {
+    mode: Mode,
+    nmap: HashMap<char, KeyBindFunction>,
+    current_buffer: buffer::Buffer, 
+    window: Window,
+}
+
+impl State {
+    pub fn new() -> Self{
+        Self {
+            mode: Mode::NORMAL, 
+            nmap: HashMap::new(),
+            current_buffer: buffer::Buffer::new(),
+            window: initscr(), 
+        }
+    }
+}
 
 fn main() {
-    let window = initscr();
-    let curbuf = buffer::Buffer::new();
+    let mut state = State::new();
 
     noecho();
     loop {
-        match window.getch() {
-            Some(Input::Character(c)) => handle_character(c), 
-            None => ()
+        match state.window.getch() {
+            Some(Input::Character(c)) => handle_character(c, &mut state), 
+            _ => (),
+
         }
     }
     endwin();
 }
 
-fn handle_character(c: char) {
+fn handle_character(c: char, mut state: &mut State) {
+    let knop: KeyBindFunction = kbf_nop;
 
-    match mode {
-        Mode::NORMAL => { nmap.get(c)?(); }
+    match state.mode {
+        Mode::NORMAL => { state.nmap.get(&c).unwrap_or(&knop)(&mut state); }
+        Mode::INSERT => { insert_character(c, &mut state ); }
     }
+}
 
+fn insert_character(c: char, state: &mut State) {
+    state.current_buffer.text.push(c);
+    state.window.addch(c);
 }
 
 pub enum Mode {
