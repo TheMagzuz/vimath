@@ -4,7 +4,7 @@ use pancurses::{initscr, endwin, noecho,Input,Window};
 use std::collections::HashMap;
 
 // TODO: Move this somewhere else
-fn kbf_nop(state: &mut State) {}
+fn kbf_nop(_state: &mut State) {}
 
 type KeyBindFunction = fn(state: &mut State);
 
