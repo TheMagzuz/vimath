@@ -75,6 +75,7 @@ impl ViMathWindow {
             self.mv(self.cursor_y-1, (old_len-1) as i32);
             self.redraw_line();
             self.redraw_end();
+            self.mv_relative(0,0);
             return
         }
 
