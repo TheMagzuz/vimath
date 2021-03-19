@@ -2,6 +2,7 @@ extern crate pancurses;
 mod buffer;
 mod util;
 mod vimathwindow;
+mod engine;
 use pancurses::{endwin, noecho,Input,curs_set};
 use std::collections::HashMap;
 
