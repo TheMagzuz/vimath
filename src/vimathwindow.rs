@@ -77,7 +77,7 @@ impl ViMathWindow {
 
         // If we are on the first character of the line, join it with the line before
         if self.cursor_x == 0 {
-            let removed = self.buffer.lines.remove(self.cursor_y as usize);
+            let removed = self.buffer.remove_line(self.cursor_y);
             let old_len = self.buffer.lines[(self.cursor_y-1) as usize].len();
             self.buffer.lines[(self.cursor_y-1) as usize].push_str(&removed);
             if old_len == 0 {
@@ -87,8 +87,9 @@ impl ViMathWindow {
             }
             self.redraw_line();
             self.redraw_end();
+            self.draw_line_numbers();
             self.mv_relative(0,0);
-            return
+            return;
         }
 
         // Otherwise, just delete the character

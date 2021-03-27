@@ -26,6 +26,13 @@ impl Buffer {
 
     }
 
+    pub fn remove_line(&mut self, line: i32) -> String {
+        assert!(line < self.get_line_count()+1);
+
+        self.line_count -= 1;
+        return self.lines.remove(line as usize);
+    }
+
     pub fn get_line(&self, line: i32) -> &String {
         return &self.lines[line as usize];
     }
