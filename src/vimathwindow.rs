@@ -24,6 +24,11 @@ impl ViMathWindow {
         return s;
     }
 
+    pub fn debug_output(&mut self, text: String) {
+        self.window.mvaddstr(10, 0, text);
+        self.mv_relative(0, 0);
+    }
+
     pub fn draw_line_numbers(&self) {
         for i in 0..self.buffer.get_line_count() {
             self.window.mvaddstr(i, 0, i.to_string());
