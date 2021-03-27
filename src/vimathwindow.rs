@@ -1,7 +1,6 @@
 extern crate pancurses;
 use crate::buffer;
 use crate::util;
-use crate::engine;
 use pancurses::{Window, initscr};
 
 pub struct ViMathWindow {
