@@ -53,6 +53,8 @@ impl ViMathWindow {
     pub fn insert_character(&mut self, c: char) {
         if c == '\n' {
             self.buffer.newline_at(self.cursor_y+1);
+            self.redraw_line();
+            self.redraw_end();
             self.draw_line_numbers();
             self.mv_relative(1, 0);
             return;
@@ -86,8 +88,10 @@ impl ViMathWindow {
     }
 
     fn redraw_line(&mut self) {
+        // Clear the entire line
         self.mv_no_mut(self.cursor_y, 0);
         self.window.clrtoeol();
+        // Draw the text on the line
         self.window.addstr(self.buffer.get_line(self.cursor_y));
         self.cursor_x += 1;
         self.mv_no_mut(self.cursor_y, self.cursor_x);
@@ -95,9 +99,9 @@ impl ViMathWindow {
 
     fn redraw_end(&mut self) {
         self.window.clrtobot();
-        for i in self.cursor_y..self.buffer.get_line_count()-1 {
+        for i in self.cursor_y..self.buffer.get_line_count() {
             self.mv_no_mut(i, 0);
-            self.window.printw(self.buffer.get_line(i));
+            self.window.addstr(self.buffer.get_line(i));
         }
     }
 
