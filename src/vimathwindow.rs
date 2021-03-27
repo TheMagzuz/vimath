@@ -1,4 +1,5 @@
 extern crate pancurses;
+use std::cmp::{max};
 use crate::buffer;
 use crate::util;
 use pancurses::{Window, initscr};
@@ -74,7 +75,11 @@ impl ViMathWindow {
             let removed = self.buffer.lines.remove(self.cursor_y as usize);
             let old_len = self.buffer.lines[(self.cursor_y-1) as usize].len();
             self.buffer.lines[(self.cursor_y-1) as usize].push_str(&removed);
-            self.mv(self.cursor_y-1, (old_len-1) as i32);
+            if old_len == 0 {
+                self.mv(self.cursor_y-1, 0);
+            } else {
+                self.mv(self.cursor_y-1, (old_len-1) as i32);
+            }
             self.redraw_line();
             self.redraw_end();
             self.mv_relative(0,0);
