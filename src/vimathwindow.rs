@@ -32,7 +32,6 @@ impl ViMathWindow {
         for i in 0..self.buffer.get_line_count() {
             self.window.mvaddstr(i, 0, i.to_string());
         }
-        self.window.vline('|', -1);
     }
 
     pub fn gutter_size(&self) -> i32 {
