@@ -1,5 +1,4 @@
 extern crate pancurses;
-use std::cmp::{max};
 use crate::buffer;
 use crate::util;
 use pancurses::{Window, initscr};
